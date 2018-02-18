@@ -1,0 +1,226 @@
+{
+  "startingRoom": "MatthewsStreet",
+  "endingRoom": "Siebel1314",
+  "rooms": [
+    {
+      "name": "MatthewsStreet",
+      "description": "You are on Matthews, outside the Siebel Center",
+      "items": [
+        {
+          "name": "Sword",
+          "damage": 10.0
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "East",
+          "room": "SiebelEntry"
+        }
+      ]
+    },
+    {
+      "name": "SiebelEntry",
+      "description": "You are in the west entry of Siebel Center.  You can see the elevator, the ACM office, and hallways to the north and east.",
+	  "items": [
+        {
+          "name": "Sweatshirt",
+          "damage": 1.0
+        },
+        {
+          "name": "Key",
+          "damage": 3.0
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "West",
+          "room": "MatthewsStreet"
+        },
+        {
+          "directionName": "Northeast",
+          "room": "AcmOffice"
+        },
+        {
+          "directionName": "North",
+          "room": "SiebelNorthHallway"
+        },
+        {
+          "directionName": "East",
+          "room": "SiebelEastHallway"
+        }
+      ],
+      "monstersInRoom": ["geoff"]
+    },
+    {
+      "name": "AcmOffice",
+      "description": "You are in the ACM office.  There are lots of friendly ACM people.",
+      "items": [
+        {
+          "name": "Swag",
+          "damage": 1.0
+        },
+        {
+          "name": "Pizza",
+          "damage": 3.0
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "South",
+          "room": "SiebelEntry"
+        }
+      ],
+      "monstersInRoom": ["billy"]
+    },
+    {
+      "name": "SiebelNorthHallway",
+      "description": "You are in the north hallway.  You can see Siebel 1112 and the door toward NCSA.",
+      "directions": [
+        {
+          "directionName": "South",
+          "room": "SiebelEntry"
+        }, 
+        {
+          "directionName": "NorthEast",
+          "room": "Siebel1112"
+        }
+      ]
+    },
+    {
+      "name": "Siebel1112",
+      "description": "You are in Siebel 1112.  There is space for two code reviews in this room.",
+      "items": [
+        {
+          "name": "bud",
+          "damage": 1.0
+        },
+        {
+          "name": "cap",
+          "damage": 3.0
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "West",
+          "room": "SiebelNorthHallway"
+        }
+      ],
+      "monstersInRoom": ["baws"]
+    },
+    {
+      "name": "SiebelEastHallway",
+      "description": "You are in the east hallway.  You can see Einstein Bros' Bagels and a stairway.",
+      "items": [
+        {
+          "name": "coffee",
+          "damage": 1.0
+        },
+        {
+          "name": "bagel",
+          "damage": 3.0
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "West",
+          "room": "SiebelEntry"
+        },
+        {
+          "directionName": "South",
+          "room": "Siebel1314"
+        },
+        {
+          "directionName": "Down",
+          "room": "SiebelBasement"
+        }
+      ],
+      "monstersInRoom": ["angrave"]
+    },
+    {
+      "name": "Siebel1314",
+      "description": "You are in Siebel 1314.  There are triggered CS 126 students doing a code review.",
+      "directions": [
+        {
+          "directionName": "North",
+          "room": "SiebelEastHallway"
+        }
+      ]
+    },
+    {
+      "name": "SiebelBasement",
+      "description": "You are in the basement of Siebel.  You see tables with students working and door to computer labs.",
+      "items": [
+        {
+          "name": "Pencil",
+          "damage": 1.0
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "Up",
+          "room": "SiebelEastHallway"
+        }
+      ]
+    }
+  ],
+  "player":
+    {
+      "name": "Mike Bartmess",
+      "items": [
+        {
+          "name": "Stick",
+          "damage": 4.0
+        }
+      ],
+      "attack": 5.0,
+      "defence": 3.0,
+      "health": 25.0,
+      "level": 0
+    },
+  "monsters": [
+    {
+      "name": "geoff",
+      "attack": 5,
+      "defence": 1.5,
+      "health": 12,
+      "monsterDrop":
+        {
+          "name": "G-sword",
+          "damage": 14.0
+        }
+    },
+    {
+      "name": "billy",
+      "attack": 3,
+      "defence": 4.5,
+      "health": 17,
+      "monsterDrop":
+      {
+        "name": "chapstic",
+        "damage": 16.0
+      }
+    },
+    {
+      "name": "angrave",
+      "attack": 20,
+      "defence": 7,
+      "health": 23,
+      "monsterDrop":
+      {
+        "name": "tombstone",
+        "damage": 24.0
+      }
+    },
+    {
+      "name": "baws",
+      "attack": 30,
+      "defence": 10,
+      "health": 40,
+      "monsterDrop":
+      {
+        "name": "lightsabre",
+        "damage": 44.0
+      }
+    }
+  ]
+}
