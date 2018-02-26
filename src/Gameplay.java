@@ -91,7 +91,12 @@ public class GamePlay {
 
 
     private static void configurationSetup(Configuration configuration) {
-
+        // Set path to acoustic model.
+        configuration.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
+        // Set path to dictionary.
+        configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
+        // Set language model.
+        configuration.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
     }
 
     public static void availableCommandsPrinter(boolean isDueling) {
@@ -165,14 +170,14 @@ public class GamePlay {
             Null arguments filter
          */
         if (directionName == null || player == null || gameMap == null) {
-            throw new NullPointerException(ERROR_CONSTANTS.NULL_POINTER_EXCEPTION);
+            throw new NullPointerException("null pointer");
         }
 
         /*
             Empty string filter
          */
         if (directionName.length() == 0) {
-            throw new IllegalArgumentException(ERROR_CONSTANTS.EMPTY_STRING_EXCEPTION);
+            throw new IllegalArgumentException("empty direction");
         }
 
         /*
@@ -258,7 +263,7 @@ public class GamePlay {
      * @param monster monster object
      * @param player player object
      */
-    private static void duel(Scanner duelScanner, Monster monster, Player player) {
+    private static void duel(LiveSpeechRecognizer duelScanner, Monster monster, Player player) {
         String duelInput;
         double monsterHealth = monster.getHealth();
         player.setDueling(true);
@@ -268,7 +273,8 @@ public class GamePlay {
             System.out.println("You are fighting " + monster.getName() + "!");
             System.out.println("What do you do?");
 
-            duelInput = duelScanner.nextLine();
+            duelScanner.startRecognition(true);
+            duelInput = duelScanner.getResult().getHypothesis();
 
             duelCommandReader(duelInput, player, monster, monsterHealth);
 
@@ -310,13 +316,13 @@ public class GamePlay {
             Null arguments filter
          */
         if (command == null || player == null || monster == null) {
-            throw new NullPointerException(ERROR_CONSTANTS.NULL_POINTER_EXCEPTION);
+            throw new NullPointerException("null");
         }
         /*
             Empty string filter
          */
         if (command.length() == 0) {
-            throw new IllegalArgumentException(ERROR_CONSTANTS.EMPTY_STRING_EXCEPTION);
+            throw new IllegalArgumentException("empty string");
         }
         String[] separatedInput = command.trim().split(" +");
         //String nounForAction = command.trim().substring(command.trim().indexOf(separatedInput[0].length()) + 1);
@@ -358,13 +364,13 @@ public class GamePlay {
      * @param userInput input line by the user
      * @param player player object in the game
      * @param gameMap map on which we're playing
-     * @param scanner scanner object for input
+     * @param recognizer live speech recognizer object for input
      */
-    private static void playerCommandRead(String userInput, Player player, Layout gameMap, Scanner scanner) {
+    private static void playerCommandRead(String userInput, Player player, Layout gameMap, LiveSpeechRecognizer recognizer) {
 
         //Null filtering
         if (userInput == null || player == null || gameMap == null) {
-            throw new NullPointerException(ERROR_CONSTANTS.NULL_POINTER_EXCEPTION);
+            throw new NullPointerException("null pointer exception");
         }
 
         //empty string filtering
@@ -394,7 +400,7 @@ public class GamePlay {
                 System.out.println("Fight what?");
             }
             else if (player.getCurrentRoom().getMonstersInRoom().contains(separatedInput[1])){
-                duel(scanner,gameMap.getMonsterFromName(separatedInput[1]), player);
+                duel(recognizer,gameMap.getMonsterFromName(separatedInput[1]), player);
             }
             else {
                 System.out.println("I can't fight " + separatedInput[1]);
@@ -456,10 +462,10 @@ public class GamePlay {
 
     /**
      * Method that runs the game description till the player reaches the map's endroom.
-     * @param consoleInput the input received from the console
+     * @param config the input received from the console
      * @param gameMap the map on which the game is being played
      */
-    private static void playGame(Configuration config, Layout gameMap) {
+    private static void playGame(Configuration config, Layout gameMap) throws Exception{
 
         //input method for speech
         LiveSpeechRecognizer recognizer = new LiveSpeechRecognizer(config);
@@ -490,10 +496,12 @@ public class GamePlay {
             }
             //Live input by the user taken as a line
             recognizer.startRecognition(true);
+            SpeechResult userInput = recognizer.getResult();
             //process the live input
-            playerCommandRead(userInput, player, gameMap, consoleInput);
+            playerCommandRead(userInput.getHypothesis(), player, gameMap, recognizer);
 
         }
+        recognizer.stopRecognition();
         //prints ending statement after exiting while loop if the end room is reached
         System.out.println("Congratulations you reached " + gameMap.getEndingRoom() + "! Your journey has ended");
     }
@@ -506,7 +514,7 @@ public class GamePlay {
      * Main method for the game
      * @param args args for main method
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Layout gameMap;
         Configuration config = new Configuration();
         configurationSetup(config);
