@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT" type="repository">
+    <properties maven-id="edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/edu/cmu/sphinx/sphinx4-core/5prealpha-SNAPSHOT/sphinx4-core-5prealpha-SNAPSHOT.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-math3/3.2/commons-math3-3.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/edu/cmu/sphinx/sphinx4-data/5prealpha-SNAPSHOT/sphinx4-data-5prealpha-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
