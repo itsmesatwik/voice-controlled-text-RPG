@@ -1,31 +1,22 @@
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import edu.cmu.sphinx.api.SpeechResult;
-import edu.cmu.sphinx.api.StreamSpeechRecognizer;
-import edu.cmu.sphinx.recognizer.Recognizer;
-import edu.cmu.sphinx.result.WordResult;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * Class which makes the game run by calling methods from other classes.
  */
-public class GamePlay {
+public class Gameplay {
     /**
      * Status code
      */
@@ -99,7 +90,7 @@ public class GamePlay {
         configuration.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
     }
 
-    public static void availableCommandsPrinter(boolean isDueling) {
+    private static void availableCommandsPrinter(boolean isDueling) {
         if (isDueling) {
             System.out.println("You can :\nAttack\nAttack with Item\nDisengage\nStatus\nList\nPlayerInfo\nExit");
         }
@@ -112,7 +103,7 @@ public class GamePlay {
      * @param url url
      * @return return the map object
      */
-    public static Layout urlAccess(String url) {
+    private static Layout urlAccess(String url) {
         try {
             Gson localGson = new Gson();
 
@@ -145,7 +136,7 @@ public class GamePlay {
      * @param filepath string of filepath
      * @return return the map object
      */
-    public static Layout filePathAccess(String filepath) {
+    private static Layout filePathAccess(String filepath) {
         Gson localGson = new Gson();
         try {
             JsonReader jsonReader = new JsonReader(new FileReader(filepath));
@@ -164,7 +155,7 @@ public class GamePlay {
      * @param player player object for moving
      * @param gameMap game map for code purposes
      */
-    public static void movePlayer(String directionName, Player player, Layout gameMap) {
+    private static void movePlayer(String directionName, Player player, Layout gameMap) {
 
         /*
             Null arguments filter
@@ -275,6 +266,7 @@ public class GamePlay {
 
             duelScanner.startRecognition(true);
             duelInput = duelScanner.getResult().getHypothesis();
+            duelScanner.stopRecognition();
 
             duelCommandReader(duelInput, player, monster, monsterHealth);
 
@@ -311,7 +303,7 @@ public class GamePlay {
      * @param monster monster object
      * @param monsterHealth monster's health
      */
-    public static void duelCommandReader(String command, Player player, Monster monster, double monsterHealth) {
+    private static void duelCommandReader(String command, Player player, Monster monster, double monsterHealth) {
         /*
             Null arguments filter
          */
@@ -497,11 +489,11 @@ public class GamePlay {
             //Live input by the user taken as a line
             recognizer.startRecognition(true);
             SpeechResult userInput = recognizer.getResult();
+            recognizer.stopRecognition();
             //process the live input
             playerCommandRead(userInput.getHypothesis(), player, gameMap, recognizer);
 
         }
-        recognizer.stopRecognition();
         //prints ending statement after exiting while loop if the end room is reached
         System.out.println("Congratulations you reached " + gameMap.getEndingRoom() + "! Your journey has ended");
     }
