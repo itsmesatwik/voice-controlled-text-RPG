@@ -1,3 +1,9 @@
+import edu.cmu.sphinx.api.Configuration;
+import edu.cmu.sphinx.api.LiveSpeechRecognizer;
+import edu.cmu.sphinx.api.SpeechResult;
+import edu.cmu.sphinx.api.StreamSpeechRecognizer;
+import edu.cmu.sphinx.recognizer.Recognizer;
+import edu.cmu.sphinx.result.WordResult;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.mashape.unirest.http.HttpResponse;
@@ -5,6 +11,9 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.MalformedURLException;
@@ -81,6 +90,9 @@ public class GamePlay {
     );
 
 
+    private static void configurationSetup(Configuration configuration) {
+
+    }
 
     public static void availableCommandsPrinter(boolean isDueling) {
         if (isDueling) {
@@ -447,8 +459,10 @@ public class GamePlay {
      * @param consoleInput the input received from the console
      * @param gameMap the map on which the game is being played
      */
-    private static void playGame(Scanner consoleInput, Layout gameMap) {
+    private static void playGame(Configuration config, Layout gameMap) {
 
+        //input method for speech
+        LiveSpeechRecognizer recognizer = new LiveSpeechRecognizer(config);
         Player player = gameMap.getPlayer();
         player.setCurrentRoom(gameMap.getRoomFromName(gameMap.getStartingRoom()));
         player.setHealthPoints(player.getRemainingHealth());
@@ -457,7 +471,6 @@ public class GamePlay {
             player is not the ending room of the map.
          */
         while (!(player.getCurrentRoom().getName().equals(gameMap.getEndingRoom()))) {
-
             //prints room description
             System.out.println(player.getCurrentRoom().getDescription());
 
@@ -475,9 +488,9 @@ public class GamePlay {
                 //prints the available directions for the current room
                 player.getCurrentRoom().printDirections();
             }
-            //Console input by the user taken as a line
-            String userInput = consoleInput.nextLine();
-            //process the console input
+            //Live input by the user taken as a line
+            recognizer.startRecognition(true);
+            //process the live input
             playerCommandRead(userInput, player, gameMap, consoleInput);
 
         }
@@ -495,7 +508,8 @@ public class GamePlay {
      */
     public static void main(String[] args) {
         Layout gameMap;
-        Scanner consoleInput = new Scanner(System.in);
+        Configuration config = new Configuration();
+        configurationSetup(config);
 
         if (args.length == 0){
             gameMap = urlAccess("https://courses.engr.illinois.edu/cs126/adventure/siebel.json");
@@ -508,7 +522,7 @@ public class GamePlay {
             System.out.println("Map Not Working!");
             System.exit(0);
         }
-        playGame(consoleInput, gameMap);
+        playGame(config, gameMap);
 
     }
 
